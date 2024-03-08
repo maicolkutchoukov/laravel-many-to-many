@@ -21,6 +21,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Titolo</th>
                                 <th scope="col">Tipo</th>
+                                <th scope="col">Tecnologie</th>
                                 <th scope="col">Creato il</th>
                                 <th scope="col">Alle</th>
                                 <th scope="col">Azioni</th>
@@ -39,6 +40,29 @@
                                         @else
                                             -
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{-- <div>
+                                            @forelse ($project->technologies as $technology)
+                                                <a href="{{ route('admin.technologies.show', ['technology' => $technology->id]) }}" class="badge rounded-pill text-bg-primary">
+                                                    {{ $technology->title }}
+                                                </a>
+                                            @empty
+                                                -
+                                            @endforelse
+                                        </div> --}}
+
+                                        {{-- <div>
+                                            @if (count($project->technologies) > 0)
+                                                @foreach ($project->technologies as $technology)
+                                                    <a href="{{ route('admin.technologies.show', ['technology' => $technology->id]) }}" class="badge rounded-pill text-bg-primary">
+                                                        {{ $technology->title }}
+                                                    </a>
+                                                @endforeach
+                                            @else
+                                                -
+                                            @endif
+                                        </div> --}}
                                     </td>
                                     {{-- Come formattare una data: https://www.php.net/manual/en/datetime.format.php --}}
                                     <td>{{ $project->created_at->format('d/m/Y') }}</td>

@@ -30,7 +30,7 @@
                                 <a class="nav-link" href="{{ route('admin.types.index') }}">Tipi</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link 3</a>
+                                <a class="nav-link" href="{{ route('admin.technologies.index') }}">Tecnologie</a>
                             </li>
                         </ul>
                         <form method="POST" action="{{ route('logout') }}">
@@ -46,7 +46,7 @@
         </header>
 
         <main class="py-4">
-            <div class="container">
+            <div class="container position-relative">
                 @yield('main-content')
             </div>
         </main>

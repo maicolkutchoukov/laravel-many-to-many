@@ -18,4 +18,9 @@ class Project extends Model
     {
         return $this->belongsTo(Type::class);
     }
+    // Many-to-Many con Tag
+    public function technologies()
+    {
+        return $this->belongsToMany(Technology::class);
+    }
 }
