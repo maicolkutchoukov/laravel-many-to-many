@@ -31,7 +31,7 @@ class TechnologyController extends Controller
      */
     public function store(Request $request)
     {
-        $technologyData = $request->validated();
+        $technologyData = $request->all();
 
         $slug = str()->slug($technologyData['title']);
 
@@ -73,7 +73,7 @@ class TechnologyController extends Controller
             'slug' => $slug,
         ]);
 
-        return redirect()->route('admin.Technologies.show', ['Technology' => $technology->id]);
+        return redirect()->route('admin.technologies.show', ['technology' => $technology->id]);
     }
 
     /**
@@ -83,6 +83,6 @@ class TechnologyController extends Controller
     {
         $technology->delete();
 
-        return redirect()->route('admin.Technologies.index');
+        return redirect()->route('admin.technologies.index');
     }
 }

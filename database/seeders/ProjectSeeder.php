@@ -11,6 +11,7 @@ use App\Models\Type;
 
 // Helpers
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class ProjectSeeder extends Seeder
 {
@@ -19,8 +20,9 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
-        Project::truncate();
-
+        Schema::withoutForeignKeyConstraints(function () {
+            Project::truncate();
+        });
         for ($i = 0; $i < 100; $i++) {
             $title = fake()->sentence();
             $slug = Str::slug($title);

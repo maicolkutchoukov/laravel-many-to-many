@@ -12,13 +12,22 @@ class Project extends Model
         'title',
         'slug',
         'content',
-        'category_id'
+        'type_id'
     ];
+
+     /*
+        Relationships
+    */
+
+    // One-to-Many con i type
+
     public function type()
     {
         return $this->belongsTo(Type::class);
     }
-    // Many-to-Many con Tag
+
+    // Many-to-Many con le technologies
+    
     public function technologies()
     {
         return $this->belongsToMany(Technology::class);

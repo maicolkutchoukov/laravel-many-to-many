@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_tag', function (Blueprint $table) {
-            $table->unsignedBigInteger('post_id');
-            $table->foreign('post_id')
+        Schema::create('project_technology', function (Blueprint $table) {
+            $table->unsignedBigInteger('project_id');
+            $table->foreign('project_id')
                 ->references('id')
-                ->on('posts')
+                ->on('projects')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
             $table->unsignedBigInteger('technology_id');
             $table->foreign('technology_id')
                 ->references('id')
-                ->on('technologys')
+                ->on('technologies')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->primary(['post_id', 'technology_id']);
+            $table->primary(['project_id', 'technology_id']);
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_tag');
+        Schema::dropIfExists('project_technology');
     }
 };

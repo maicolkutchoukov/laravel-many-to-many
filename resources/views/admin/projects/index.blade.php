@@ -31,7 +31,11 @@
                             @foreach ($projects as $project)
                                 <tr>
                                     <th scope="row">{{ $project->id }}</th>
-                                    <td>{{ $project->title }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.projects.show', ['project' => $project->id]) }}" class="">
+                                            {{ $project->title }}
+                                        </a>
+                                    </td>
                                     <td>
                                         @if ($project->type != null)
                                             <a href="{{ route('admin.types.show', ['type' => $project->type->id]) }}">
@@ -42,7 +46,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{-- <div>
+                                        <div>
                                             @forelse ($project->technologies as $technology)
                                                 <a href="{{ route('admin.technologies.show', ['technology' => $technology->id]) }}" class="badge rounded-pill text-bg-primary">
                                                     {{ $technology->title }}
@@ -50,7 +54,7 @@
                                             @empty
                                                 -
                                             @endforelse
-                                        </div> --}}
+                                        </div>
 
                                         {{-- <div>
                                             @if (count($project->technologies) > 0)
@@ -67,10 +71,7 @@
                                     {{-- Come formattare una data: https://www.php.net/manual/en/datetime.format.php --}}
                                     <td>{{ $project->created_at->format('d/m/Y') }}</td>
                                     <td>{{ $project->created_at->format('H:i') }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.projects.show', ['project' => $project->id]) }}" class="btn btn-xs btn-primary">
-                                            Vedi
-                                        </a>
+                                    <td class="w-25">
                                         <a href="{{ route('admin.projects.edit', ['project' => $project->id]) }}" class="btn btn-xs btn-warning">
                                             Modifica
                                         </a>
