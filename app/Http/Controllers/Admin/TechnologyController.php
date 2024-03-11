@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Technology;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+// Models
+use App\Models\Technology;
+
 
 class TechnologyController extends Controller
 {

@@ -7,6 +7,11 @@ use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\Project;
+use App\Models\Technology;
+use App\Models\Type;
+
+// Form Requests
+use App\Http\Requests\StoreProjectRequest;
 
 // Helpers
 use Illuminate\Support\Str;
@@ -28,32 +33,36 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $types = Type::all();
+        $technologies = Technology::all();
+
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $projectData = $request->all();
+        $validated_data = $request->validated();
 
-        $slug = Str::slug($projectData['title']);
+        $project = new Project($validated_data);
+        $project->title = $validated_data["title"];
+        $project->slug = Str::slug($validated_data["title"]);
+        $project->content = $validated_data["content"];
+        $project->type_id = $validated_data["type_id"];
 
-        $existingProjectWithThisSlug = Project::where('slug', $slug)->first();
+        $project->save();
 
-        // Se entra qui, vuol dire che non ha trovato un project con questo slug
-        if ($existingProjectWithThisSlug != null) {
-            // Genera un nuovo slug
-            $slug = $slug.'-1';
+        if (isset($validated_data['technologies'])) {
+            foreach ($validated_data['technologies'] as $single_technology_id) {
+                // attach this technology_id to this project
+                $project->technologies()->attach($single_technology_id);
+            }
         }
+        ;
 
-        $project = Project::create([
-            'title' => $projectData['title'],
-            'slug' => $slug,
-            'content' => $projectData['content'],
-        ]);
-        return redirect()->route('admin.projects.show', compact('project'));
+        return redirect()->route('admin.projects.show', ['project' => $project->id]);
     }
 
     /**
@@ -69,7 +78,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'technologies', 'types'));
     }
 
     /**
@@ -79,7 +90,19 @@ class ProjectController extends Controller
     {
         $projectData = $request->all();
         $slug = Str::slug($projectData['title']);
-        $project->update($projectData);
+        $project->update([
+            'title' => $projectData['title'],
+            'slug' => $slug,
+            'content' => $projectData['content'],
+            'type_id' => $projectData['type_id'],
+        ]);
+
+        if (isset($projectData['technologies'])) {
+            $project->technologies()->sync($projectData['technologies']);
+        }
+        else {
+            $project->technologies()->detach();
+        }
 
         return redirect()->route('admin.projects.show', compact('project'));
     }
