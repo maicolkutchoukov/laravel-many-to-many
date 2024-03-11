@@ -12,7 +12,7 @@ use App\Models\Type;
 
 // Form Requests
 use App\Http\Requests\StoreProjectRequest;
-
+use App\Http\Requests\UpdateProjectRequest;
 // Helpers
 use Illuminate\Support\Str;
 
@@ -86,25 +86,25 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, string $id)
     {
-        $projectData = $request->all();
-        $slug = Str::slug($projectData['title']);
-        $project->update([
-            'title' => $projectData['title'],
-            'slug' => $slug,
-            'content' => $projectData['content'],
-            'type_id' => $projectData['type_id'],
-        ]);
+        $validated_data = $request->validated();
+        $project = Project::where("id", $id)->firstOrFail();
 
-        if (isset($projectData['technologies'])) {
-            $project->technologies()->sync($projectData['technologies']);
-        }
-        else {
+        $project->title = $validated_data["title"];
+        $project->slug = Str::slug($validated_data["title"]);
+        $project->content = $validated_data["content"];
+        $project->type_id = $validated_data["type_id"];
+
+        $project->save();
+
+        if (isset($validated_data['technologies'])) {
+            $project->technologies()->sync($validated_data['technologies']);
+        } else {
             $project->technologies()->detach();
         }
 
-        return redirect()->route('admin.projects.show', compact('project'));
+        return redirect()->route('admin.projects.show', ['project' => $project->id]);
     }
 
     /**
