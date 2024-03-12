@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Technology;
 use App\Models\Type;
+use Illuminate\Support\Facades\Storage;
 
 // Form Requests
 use App\Http\Requests\StoreProjectRequest;
@@ -44,18 +45,24 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $validated_data = $request->validated();
+        $validatedData = $request->validated();
 
-        $project = new Project($validated_data);
-        $project->title = $validated_data["title"];
-        $project->slug = Str::slug($validated_data["title"]);
-        $project->content = $validated_data["content"];
-        $project->type_id = $validated_data["type_id"];
+        $coverImgPath = null;
+        if (isset($validatedData['cover_img'])) {
+            $coverImgPath = Storage::disk('public')->put('images', $validatedData['cover_img']);
+        }
+
+        $project = new Project($validatedData);
+        $project->title = $validatedData["title"];
+        $project->slug = Str::slug($validatedData["title"]);
+        $project->content = $validatedData["content"];
+        $project->type_id = $validatedData["type_id"];
+        $project->cover_img = $coverImgPath;
 
         $project->save();
 
-        if (isset($validated_data['technologies'])) {
-            foreach ($validated_data['technologies'] as $single_technology_id) {
+        if (isset($validatedData['technologies'])) {
+            foreach ($validatedData['technologies'] as $single_technology_id) {
                 // attach this technology_id to this project
                 $project->technologies()->attach($single_technology_id);
             }
@@ -88,18 +95,32 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, string $id)
     {
-        $validated_data = $request->validated();
+        $validatedData = $request->validated();
         $project = Project::where("id", $id)->firstOrFail();
 
-        $project->title = $validated_data["title"];
-        $project->slug = Str::slug($validated_data["title"]);
-        $project->content = $validated_data["content"];
-        $project->type_id = $validated_data["type_id"];
+        $coverImgPath = $project->cover_img;
+        if (isset($validatedData['cover_img'])) {
+            if ($project->cover_img != null) {
+                Storage::disk('public')->delete($project->cover_img);
+            }
+
+            $coverImgPath = Storage::disk('public')->put('images', $validatedData['cover_img']);
+        }
+        else if (isset($validatedData['delete_cover_img'])) {
+            Storage::disk('public')->delete($project->cover_img);
+
+            $coverImgPath = null;
+        }
+        $project->title = $validatedData["title"];
+        $project->slug = Str::slug($validatedData["title"]);
+        $project->content = $validatedData["content"];
+        $project->type_id = $validatedData["type_id"];
+        $project->cover_img = $coverImgPath;
 
         $project->save();
 
-        if (isset($validated_data['technologies'])) {
-            $project->technologies()->sync($validated_data['technologies']);
+        if (isset($validatedData['technologies'])) {
+            $project->technologies()->sync($validatedData['technologies']);
         } else {
             $project->technologies()->detach();
         }

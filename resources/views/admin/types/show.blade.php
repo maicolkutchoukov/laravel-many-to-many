@@ -3,6 +3,11 @@
 @section('page-title', $type->title)
 
 @section('main-content')
+    <div class="mb-4">
+        <a href="{{ route('admin.projects.index') }}" class="btn btn-primary">
+            Torna all'index dei progetti
+        </a>
+    </div>
     <div class="row mb-4">
         <div class="col">
             <div class="card">

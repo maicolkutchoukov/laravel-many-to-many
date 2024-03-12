@@ -11,6 +11,11 @@
                     {{$project->title}}
                 </h1>
 
+                @if ($project->cover_img != null)
+                        <div class="my-3">
+                            <img src="{{ asset('storage/'.$project->cover_img) }}" style="max-width: 400px;">
+                        </div>
+                    @endif
                 <p>
                     {{ $project->content }}
                 </p>
@@ -29,6 +34,15 @@
                         -
                     @endforelse
                 </p>
+                <div class="mb-4">
+                    <a href="{{ route('admin.projects.index') }}" class="btn btn-primary">
+                        Torna all'index dei progetti
+                    </a>
+                    <a href="{{ route('admin.projects.edit', ['project' => $project->id]) }}" class="btn btn-xs btn-warning">
+                        Modifica
+                    </a>
+                </div>
+                
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 @section('page-title', $project->title.' Edit')
 
 @section('main-content')
-<h1>
+<h1 class="text-white">
     {{ $project->title }} Edit
 </h1>
 
@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.projects.update', ['project' => $project->id]) }}" method="POST">
+        <form action="{{ route('admin.projects.update', ['project' => $project->id]) }}" method="POST" enctype="multipart/form-data">
             {{--
                 C   Cross
                 S   Site
@@ -42,6 +42,26 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Titolo <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $project->title) }}" placeholder="Inserisci il titolo..." maxlength="255" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="cover_img" class="form-label">Cover image</label>
+                <input class="form-control" type="file" id="cover_img" name="cover_img">
+
+                @if ($project->cover_img != null)
+                    <div class="mt-2">
+                        <h4>
+                            Copertina attuale:
+                        </h4>
+                        <img src="/storage/{{ $project->cover_img }}" style="max-width: 400px;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="delete_cover_img" name="delete_cover_img">
+                            <label class="form-check-label" for="delete_cover_img">
+                                Rimuovi immagine
+                            </label>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="mb-3">
@@ -87,13 +107,7 @@
             </div>
 
             <div>
-                <button type="submit" class="btn btn-success w-100">
-                    + Aggiungi
-                </button>
-            </div>
-
-            <div>
-                <button type="submit" class="btn btn-warning w-100">
+                <button type="submit" class="btn btn-warning ">
                     Aggiorna
                 </button>
             </div>

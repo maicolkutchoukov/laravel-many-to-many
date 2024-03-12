@@ -27,12 +27,14 @@ class ProjectSeeder extends Seeder
             $title = fake()->sentence();
             $slug = Str::slug($title);
             $randomType = Type::inRandomOrder()->first();
-
+/*             $randomNumber = random_int(1, 300);
+            $randomImage = 'https://picsum.photos/id/'.$randomNumber.'/200/300'; */
             $project = Project::create([
                 'title' => $title,
                 'slug' => $slug,
                 'content' => fake()->paragraph(),
                 'type_id' => $randomType->id,
+                /* 'cover_img' => $randomImage */
 
             ]);
         }

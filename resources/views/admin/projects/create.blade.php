@@ -25,7 +25,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('admin.projects.store') }}" method="POST">
+        <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
             {{--
                 C   Cross
                 S   Site
@@ -42,6 +42,11 @@
             <div class="mb-3">
                 <label for="content" class="form-label">Contenuto</label>
                 <textarea class="form-control" id="content" name="content" rows="3" placeholder="Inserisci il contenuto..." required>{{ old('content') }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="cover_img" class="form-label">Cover image</label>
+                <input class="form-control" type="file" id="cover_img" name="cover_img">
             </div>
 
             <div class="mb-3">
