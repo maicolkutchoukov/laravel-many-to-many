@@ -15,7 +15,7 @@
                         <div class="my-3">
                             <img src="{{ asset('storage/'.$project->cover_img) }}" style="max-width: 400px;">
                         </div>
-                    @endif
+                @endif
                 <p>
                     {{ $project->content }}
                 </p>
