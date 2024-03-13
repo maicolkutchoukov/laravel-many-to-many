@@ -26,18 +26,10 @@ class ProjectTechnologySeeder extends Seeder
             $project->technologies()->attach($randomProject->id);
         } */
         foreach ($projects as $project) {
-            $technologies = Technology::inRandomOrder()->get();
+            $technologies = Technology::inRandomOrder()->limit(rand(0, 3))->get();
             
-            $counter = 0;
-            $maxTechnologies = rand(0, 3);
-            foreach ($technologies as $technology) {
-                if ($counter < $maxTechnologies) {
-                    $project->technologies()->attach($technology->id);
-                    $counter++;
-                }
-                else {
-                    break;
-                }
+            foreach ($technologies as $technology) {              
+                $project->technologies()->attach($technology->id);
             }
         }
     }
